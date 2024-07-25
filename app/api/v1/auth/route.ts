@@ -34,22 +34,23 @@ export async  function POST(request:Request , { params}: {params : { id : string
             }
             
 
-          //   const token = await user.signedJwtToken();
+      //       const token = await user.signedJwtToken();
 
-          //   const date : Date =  new Date(Date.now() +  30 * 24 * 60 * 60 * 1000 );
-          //   const options = {
-          //      expires : date  , 
-          //      httpOnly : true , 
-          //   }
+      //       const date : Date =  new Date(Date.now() +  30 * 24 * 60 * 60 * 1000 );
+      //       const options = {
+      //          expires : date  , 
+      //          httpOnly : true , 
+      //       }
 
 
-          // let cookie  =   cookies().set("token", token , options )
-          //   console.log(cookie);
+      //     let cookie  =   cookies().set("token", token , options )
+      //       console.log(cookie);
+      
 
-          //   return new NextResponse(JSON.stringify({token : token}), { status : 200})
+      //       return new NextResponse(JSON.stringify({token:token}), { status : 200})
               let token   = ResponseToken(user)
                console.log(token)
-              return new NextResponse("Logged IN", { status : 200});
+              return new NextResponse(JSON.stringify({token:token}), { status : 200});
 
        } catch (error) {
            console.log(error);

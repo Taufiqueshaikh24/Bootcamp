@@ -112,11 +112,13 @@ const bootcampSchema  = new Schema({
             type: Boolean,
             default: false
           },
-        //   user: {
-        //     type : Schema.Types.ObjectId,
-        //     required: true , 
-        //     ref:'User'
-        //   }
+          user:{
+            type: Schema.Types.ObjectId,
+            // here i was getting error because i was writing with lower casr 'user' after 'User' error solved
+            ref : 'User',
+            required : true
+      
+        }
 }, {
     toJSON : { virtuals : true },
     toObject : { virtuals  : true }
@@ -144,39 +146,39 @@ bootcampSchema.pre('save' , async function(next){
 //   });
 
 
-// bootcampSchema.pre<BootcampDocument>('save', async function (next) {
-//     if (!this.isModified('address')) { // Only geocode if address has changed
-//       return next();
-//     }
+bootcampSchema.pre<BootcampDocument>('save', async function (next) {
+    if (!this.isModified('address')) { // Only geocode if address has changed
+      return next();
+    }
   
-//     try {
-//       const loc = await geocoder.geocode(this.address);
-//       if (!loc || !loc.length) {
-//         throw new Error('Address not found');
-//       }
+    try {
+      const loc = await geocoder.geocode(this.address);
+      if (!loc || !loc.length) {
+        throw new Error('Address not found');
+      }
   
-//       const { longitude, latitude, formattedAddress, streetName, city, stateCode, zipcode, countryCode  } = loc[0] as { longitude: number; latitude: number , formattedAddress:string , streetName :string , zipcode:string  , city:string , stateCode:string , countryCode:string  }; ; 
+      const { longitude, latitude, formattedAddress, streetName, city, stateCode, zipcode, countryCode  } = loc[0] as { longitude: number; latitude: number , formattedAddress:string , streetName :string , zipcode:string  , city:string , stateCode:string , countryCode:string  }; ; 
   
-//       this.location = {
-//         type: 'Point',
-//         coordinates: [longitude, latitude],
-//         formattedAddress,
-//         street:streetName,
-//         city,
-//         state:stateCode,
-//         zipcode,
-//         country:countryCode,
-//       };
+      this.location = {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+        formattedAddress,
+        street:streetName,
+        city,
+        state:stateCode,
+        zipcode,
+        country:countryCode,
+      };
   
-//     //   Optionally, remove address field from being saved
-//     //   delete this?.address 
-//     } catch (error) {
-//       console.error('Geocoding error:', error);
-//       // Handle geocoding errors appropriately, e.g., return an error or set a flag
-//     }
+    //   Optionally, remove address field from being saved
+    //   delete this?.address 
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      // Handle geocoding errors appropriately, e.g., return an error or set a flag
+    }
   
-//     next();
-//   });
+    next();
+  });
   
 
 

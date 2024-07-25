@@ -13,8 +13,7 @@ export default function ResponseToken(user:any){
 
     let cookie = cookies().set("token"  , token , options);
   
-    console.log(cookie);
 
-    return new NextResponse(JSON.stringify({token : token}), { status : 200})
-
+    //  return new NextResponse(JSON.stringify({token : token}), { status : 200})
+     return token;
 };
