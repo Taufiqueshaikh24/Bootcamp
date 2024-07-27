@@ -50,7 +50,6 @@ export async function PUT(req:Request , {params}:{params:{bootcampId:string }}){
                          housing: body.housing,
                          jobAssistance: body.jobAssistance,
                          jobGuarantee: body.jobGuarantee,
-
                 }, { new:true })
 
             if(!updateBootcamp){

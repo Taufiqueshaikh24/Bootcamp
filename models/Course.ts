@@ -29,12 +29,12 @@ const courseSchema = new Schema({
                 default:false
         },
         bootcamp: {
-            type: Schema.ObjectId,
+            type: Schema.Types.ObjectId,
             ref : 'Bootcamp',
             required:true,
         },
         user: {
-            type: Schema.ObjectId,
+            type: Schema.Types.ObjectId,
             ref:'User',
             required: true
         }

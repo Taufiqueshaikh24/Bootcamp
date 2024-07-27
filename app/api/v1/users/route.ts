@@ -31,16 +31,13 @@ export async function POST(request : Request){
         const body = await request.json();
         
 
-        
-        const email = await User.findOne({email:body.email});
+     
          
 
 
-        if(email.email == body.email){
-              return new Response("Email Already Exists")
-        }
-        // console.log("this is the ",email);
-        console.log(body.email);
+     
+        // // console.log("this is the ",email);
+        // console.log(body.email);
 
 
 
@@ -53,8 +50,16 @@ export async function POST(request : Request){
            }
         );
 
+   
+        const email = await User.findOne({email:body.email});
+           if(email){
+              return new Response("Email Already Exists")
+        }
+
+        
+
         await user.save();
-        return new NextResponse(JSON.stringify(user) , {status: 200})
+        return new NextResponse(JSON.stringify(user), {status: 200})
     } catch (error: any) {
         console.log(error);
         return new NextResponse("Something went wrong",  { status: 500})
