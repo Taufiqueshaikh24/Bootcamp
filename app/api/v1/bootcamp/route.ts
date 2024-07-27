@@ -1,29 +1,31 @@
 import connectDB from "@/lib/db";
 import { NextResponse } from "next/server";
 import Bootcamp from "@/models/Bootcamp";
-import { cookies } from "next/headers";
-import  jwt  from "jsonwebtoken";
-import User from "@/models/Users";
 import Protected from "@/utils/Protected";
-import { brotliDecompress } from "zlib";
+import BootcampSchema from "@/models/Bootcamp";
 
-export async function GET(request:Request){
-              try {
-                 await connectDB();
+export async function GET(req:Request){
+   try {
+      await connectDB();
 
-                 const bootcamp = await Bootcamp.find();
+      let decode = await Protected(req);
 
-                 if(!bootcamp){
-                    return new Response("Bootcamp not found");
-                 }
+      const { id } = decode as { id : string };
 
-                return new NextResponse(JSON.stringify(bootcamp) , { status : 200})
-              } catch (error) {
-                 console.log(error);
+      if(!id){
+          return new Response("You are not Authorizded" , { status : 403});
+      }
 
-                return new NextResponse("Something went wrong" , { status  : 500})
-              }
+      const bootcamp = await BootcampSchema.find();
+   
+      return new Response(JSON.stringify(bootcamp), { status  : 200});
+
+   } catch (error) {
+        console.log(error);
+        return new Response("Something went wrong" , { status  : 500});
+   }
 }
+
 
 
 export async function POST(request:Request){
@@ -35,7 +37,13 @@ export async function POST(request:Request){
             
             
             let decode  =  await Protected(request)
+           
             let { id } = decode as { id : string} ; 
+            
+            if(!id){
+               return new Response("You are not Authorized");
+           }
+           
             // to set the id which user was making the request 
             body.user = id 
 

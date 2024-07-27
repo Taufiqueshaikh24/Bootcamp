@@ -14,19 +14,22 @@ export default async function Protected(req:Request){
     const token = tokenCookie?.value;
       
     if(!token){
-         return new Response("You are not Authorized to Access this Page" , { status:400});
-    }
+        return new Response("You are not Authorized to Access this Page" , { status:400});
+   }
+   
           let decode ; 
             try {
                  decode = jwt.verify(token , process.env.JWT_SECRET as string );
-                 const { id }  = decode as { id : string } ;
-                console.log("Decoded" , decode);
-            } catch (error) {
-                console.log(error);
-            
-            }
+                 
+                 const { id }  = await decode as { id : string } ;
+                 console.log("Decoded" , decode);
+                } catch (error) {
+                    console.log(error);
+                    
+                }
+     
 
+            return decode
+        
 
-
-        return decode
 }
