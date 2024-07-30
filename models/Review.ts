@@ -1,5 +1,6 @@
 import { Schema , model , models } from "mongoose";
 
+
 const reviewSchema =   new Schema({
      title :{
          type : String , 
@@ -29,9 +30,12 @@ const reviewSchema =   new Schema({
      }
 })
 
+//this below line ensure that each user can only submit one review for a specific bootcamp.
 
-
+// reviewSchema.index({bootcamp : 1 , user : 1} , { unique : true });
 
 const Review = models.Review  || model('Review' , reviewSchema);
+
+reviewSchema.index({ user: 1, bootcamp: 1 }, { unique: true });
 
 export default Review; 

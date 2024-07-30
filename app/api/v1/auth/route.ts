@@ -1,7 +1,7 @@
 import connectDB from "@/lib/db";
 import User from "@/models/Users";
 import ResponseToken from "@/utils/ResponseToken";
-import { cookies } from "next/headers";
+import Protected from "@/utils/Protected";
 import { NextResponse } from "next/server";
 
 
@@ -57,4 +57,48 @@ export async  function POST(request:Request , { params}: {params : { id : string
             return new Response("Something went wrong" , { status : 500} )
        }
 
+}
+
+
+
+export async function GET(req: Request){
+        try {
+            await connectDB();
+
+            const decode = await Protected(req);
+
+            const { id }  = decode as { id  : string};
+
+            if(!id){
+                   return new Response("You are Not Authorized" , { status : 403})
+            }
+
+            const user = await User.findById(id);
+
+            return new Response(JSON.stringify(user) , { status : 200});
+        } catch (error) {
+             console.log(error);
+             return new Response("Something went wrong" , { status : 500});
+        }
+}
+
+
+export async function PUT(req:Request){
+         try {
+            await connectDB();
+
+            const decode = await Protected(req);
+
+            const { id }  = decode as { id  : string};
+
+            if(!id){
+                   return new Response("You are Not Authorized" , { status : 403})
+            }
+
+
+            
+
+         } catch (error) {
+            
+         }
 }
