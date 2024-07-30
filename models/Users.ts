@@ -1,6 +1,7 @@
 import { Schema , model , models } from "mongoose";
 import  bcrypt, { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from 'node:crypto';
 
 
 
@@ -21,8 +22,11 @@ const UserSchema = new Schema({
             minlength: 4 , 
             select:false
        }, 
-    //    resetPasswordToken :  String , 
-    //    resetTokenExpire : new Date,
+       resetPasswordToken :  String , 
+       resetTokenExpire : {
+                type:Date,
+                default:Date.now      
+       },
        role  :    {
                  type: String , 
                 enum : ["publisher" , "user"] , 
@@ -54,6 +58,20 @@ UserSchema.methods.signedJwtToken = function(){
 
 UserSchema.methods.matchPassword = async function(enteredPassword:string){
     return await compare(enteredPassword , this.password);
+}
+
+
+UserSchema.methods.getResetPasswordToken = function(){
+        // Generate the reset password token
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        // Hash token and set to reset password field
+        this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        // set the expire date with in 10 min 
+        this.resetTokenExpire =  Date.now() + 10 * 600 * 1000
+
+
+        return resetToken ; 
+
 }
 
 
